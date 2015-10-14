@@ -14,7 +14,7 @@ var Poll = mongoose.model('Poll',pollSchema);
 
 app.get('/', function (req, res) {
   console.log('connected');
-  res.send('Hello World!');
+  res.send('Welcome!');
 });
 
 var testIdNo = 0;
@@ -99,10 +99,10 @@ mongoose.connect(mongodbUri,function(err){
         throw err;
     }
     
-    var server = app.listen(3000, function () {
+    var server = app.listen(3003, function () {
     var host = server.address().address;
     var port = server.address().port;
   
-    console.log('Example app listening at http://%s:%s', host, port);
+    console.log('listening at http://%s:%s', host, port);
   });
 });
