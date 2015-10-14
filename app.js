@@ -1,8 +1,8 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var app = express();
-//var mongodbUri = 'mongodb://localhost/polldb';
-var mongodbUri = 'mongodb://letspoll:letspoll00@ds053158.mongolab.com:53158/polldb';
+var mongodbUri = 'mongodb://localhost/polldb';
+//var mongodbUri = 'mongodb://letspoll:letspoll00@ds053158.mongolab.com:53158/polldb';
 
 
 var pollSchema= mongoose.Schema(
