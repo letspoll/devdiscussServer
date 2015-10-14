@@ -99,7 +99,7 @@ mongoose.connect(mongodbUri,function(err){
         throw err;
     }
     
-    var server = app.listen(3003, function () {
+    var server = app.listen(80, function () {
     var host = server.address().address;
     var port = server.address().port;
   
