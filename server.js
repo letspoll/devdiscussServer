@@ -17,17 +17,18 @@ app.get('/', function (req, res) {
   res.send('Welcome!');
 });
 
-var testIdNo = 0;
+//var testIdNo = 0;
 
 app.get('/poll/:pollNo', function (req, res) {
   console.log('poll' + req.params.pollNo);
   
-  // var ipAddr = req.headers['x-forwarded-for'] || 
-  //                req.connection.remoteAddress || 
-  //                req.socket.remoteAddress ||
-  //                req.connection.socket.remoteAddress;                 
-  // var query = {id:ipAddr};
-  var query = {id:testIdNo++};
+  var ipAddr = req.headers['x-forwarded-for'] || 
+                 req.connection.remoteAddress || 
+                 req.socket.remoteAddress ||
+                 req.connection.socket.remoteAddress;
+                 
+  var query = {id:ipAddr};
+  //var query = {id:testIdNo++};
   var options = {upsert:true};
   Poll.findOneAndUpdate(query, { pollNo: req.params.pollNo }, options, function(err,silence){
     if(err){
