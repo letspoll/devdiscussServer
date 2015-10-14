@@ -7,7 +7,7 @@ var mongodbUri = 'mongodb://localhost/polldb';
 
 var pollSchema= mongoose.Schema(
   {id:String
-  ,pollNo:String}
+  ,pollChar:String}
 );
 
 var Poll = mongoose.model('Poll',pollSchema);
@@ -19,8 +19,8 @@ app.get('/', function (req, res) {
 
 var testIdNo = 0;
 
-app.get('/poll/:pollNo', function (req, res) {
-  console.log('poll' + req.params.pollNo);
+app.get('/poll/:pollChar', function (req, res) {
+  console.log('poll' + req.params.pollChar);
   
   // var ipAddr = req.headers['x-forwarded-for'] || 
   //                req.connection.remoteAddress || 
@@ -29,7 +29,7 @@ app.get('/poll/:pollNo', function (req, res) {
   // var query = {id:ipAddr};
   var query = {id:testIdNo++};
   var options = {upsert:true};
-  Poll.findOneAndUpdate(query, { pollNo: req.params.pollNo }, options, function(err,silence){
+  Poll.findOneAndUpdate(query, { pollChar: req.params.pollChar }, options, function(err,silence){
     if(err){
       console.err(err);
       res.send('fail');
@@ -42,10 +42,10 @@ app.get('/poll/:pollNo', function (req, res) {
 });
 
 
-app.get('/view/:pollNo', function (req, res) {
-  console.log('view' + req.params.pollNo);
+app.get('/view/:pollChar', function (req, res) {
+  console.log('view' + req.params.pollChar);
   
-  Poll.count({pollNo: req.params.pollNo}, function(err,cnt){
+  Poll.count({pollChar: req.params.pollChar}, function(err,cnt){
     if(err){
       console.err(err);
       res.send('fail');
@@ -63,27 +63,34 @@ app.get('/view/:pollNo', function (req, res) {
   });
 });
 
-app.get('/getPollReport', function (req, res) {
+app.post('/getPollReport', function (req, res) {
   console.log('getPollReport');
   
   Poll.aggregate([
         {
             $group: {
-                _id: '$pollNo',  //$region is the column name in collection
+                _id: '$pollChar',  //$region is the column name in collection
                 count: {$sum: 1}
             }
         }
     ], function (err, result) {
         if (err) {
-            next(err);
+            console.err(err);
+            res.send('fail');
+            throw err;
         } else {
-            res.json(result);
+            res.set({
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Headers': 'X-Requested-With'
+            });
+            
+            res.send(result);            
         }
     });
 });
 
 app.get('/clearAll', function (req, res) {
-  console.log('clearAll' + req.params.pollNo);
+  console.log('clearAll');
   
   Poll.remove({}, function(err){
     if(err){
