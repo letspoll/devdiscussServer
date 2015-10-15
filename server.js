@@ -12,6 +12,13 @@ var pollSchema= mongoose.Schema(
 
 var Poll = mongoose.model('Poll',pollSchema);
 
+var questionSchema= mongoose.Schema(
+  {id:String
+  ,question:String}
+);
+
+var Question = mongoose.model('Question',questionSchema);
+
 app.get('/', function (req, res) {
   console.log('connected');
   res.send('Welcome!');
@@ -103,6 +110,50 @@ app.get('/clearAll', function (req, res) {
   });
 });
 
+
+var questionId = 1;
+
+app.get('/question/:question', function (req, res) {
+  console.log('question' + req.params.question);
+  
+  var q = new Question({
+    id : questionId++, 
+    question : req.params.question});
+
+  res.set({
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'X-Requested-With'
+      });      
+
+  q.save(function (err, data) {
+    if (err) {
+      console.err(err);
+      res.send('fail');
+      throw err;
+    } else {
+      res.send("success");
+    }
+  });  
+});
+
+app.get('/getQuestionAll/:id', function (req, res) {
+  console.log('getQuestionAll' + req.params.id);
+  
+  Question.find({ 'id': { $gt: req.params.id} }, function (err, result) {
+    if (err) {
+      console.err(err);
+      res.send('fail');
+      throw err;
+    } else {      
+      res.set({
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'X-Requested-With'
+      });      
+      res.send(result);
+    }
+  });
+
+});
 
 mongoose.connect(mongodbUri,function(err){
     if(err){
