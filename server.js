@@ -12,12 +12,14 @@ var pollSchema= mongoose.Schema(
 
 var Poll = mongoose.model('Poll',pollSchema);
 
+/*
 var questionSchema= mongoose.Schema(
   {id:String
   ,question:String}
 );
 
 var Question = mongoose.model('Question',questionSchema);
+*/
 
 app.get('/', function (req, res) {
   console.log('connected');
@@ -34,7 +36,7 @@ app.get('/poll/:pollChar', function (req, res) {
                  req.socket.remoteAddress ||
                  req.connection.socket.remoteAddress;                 
   var query = {id:ipAddr};
-  //var query = {id:testIdNo++};
+//  var query = {id:testIdNo++};
   var options = {upsert:true};
   Poll.findOneAndUpdate(query, { pollChar: req.params.pollChar }, options, function(err,silence){
     if(err){
@@ -111,6 +113,7 @@ app.get('/clearAll', function (req, res) {
 });
 
 
+/*
 var questionId = 1;
 
 app.get('/question/:question', function (req, res) {
@@ -154,6 +157,7 @@ app.get('/getQuestionAll/:id', function (req, res) {
   });
 
 });
+*/
 
 mongoose.connect(mongodbUri,function(err){
     if(err){
